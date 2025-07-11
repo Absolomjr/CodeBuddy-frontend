@@ -29,6 +29,8 @@ const Login = () => {
         navigate("/mentee-dashboard");
       } else if (res.data.user.role === "Mentor") {
         navigate("/mentor-dashboard");
+      } else if (res.data.user.role === "Admin"){
+        navigate("/admin-dashboard")
       }
     } catch (err) {
       console.error("Login error:", err);

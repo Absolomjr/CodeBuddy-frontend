@@ -7,6 +7,7 @@ import MenteeDashboard from "./components/MenteeDashboard";
 import MentorDashboard from "./components/MentorDashboard";
 import { UserProvider, useUser } from "./context/UserContext";
 import ProtectedRoute from "./components/ProtectedRoute";
+import AdminDashboard from "./components/AdminDashboard";
 
 
 import reactLogo from './assets/react.svg'
@@ -34,6 +35,14 @@ function App() {
           element ={
             <ProtectedRoute role ="Mentor">
               <MentorDashboard />
+            </ProtectedRoute>
+          }
+          />
+          {/* Protected Admin Routes */}
+          <Route path="/admin-dashboard"
+          element ={
+            <ProtectedRoute role="Admin">
+              <AdminDashboard />
             </ProtectedRoute>
           }
           />
