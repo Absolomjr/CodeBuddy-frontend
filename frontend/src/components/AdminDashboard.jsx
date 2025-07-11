@@ -106,7 +106,7 @@ const AdminDashboard = () => {
       password: "",
       degree: user.degree || "",
       role,
-      course: user.course || "",
+      
       course: user.course || "",
     });
     setModalType(role === "Mentee" ? "edit-mentee" : "edit-mentor");
