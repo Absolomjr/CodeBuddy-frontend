@@ -9,7 +9,7 @@ const initialForm = {
   password: "",
   degree: "",
   role: "Mentee",
-  specialty: "",
+//   specialty: "",
   course: "",
 };
 
@@ -72,8 +72,8 @@ const AdminDashboard = () => {
     (mentor) =>
       mentor.name.toLowerCase().includes(searchMentor.toLowerCase()) ||
       mentor.email.toLowerCase().includes(searchMentor.toLowerCase()) ||
-      (mentor.specialty &&
-        mentor.specialty.toLowerCase().includes(searchMentor.toLowerCase()))
+      (mentor.course &&
+        mentor.course.toLowerCase().includes(searchMentor.toLowerCase()))
   );
 
   const handleDelete = async (id, role) => {
@@ -104,7 +104,7 @@ const AdminDashboard = () => {
       password: "",
       degree: user.degree || "",
       role,
-      specialty: user.specialty || "",
+      course: user.course || "",
       course: user.course || "",
     });
     setModalType(role === "Mentee" ? "edit-mentee" : "edit-mentor");
@@ -148,6 +148,7 @@ const AdminDashboard = () => {
       setLoadingReport(false);
     }
   };
+   
 
   return (
     <div className="min-h-screen bg-gray-100 p-6">
@@ -330,7 +331,7 @@ const AdminDashboard = () => {
                   Email
                 </th>
                 <th className="px-4 py-2 text-left text-sm font-medium text-gray-500">
-                  Specialty
+                  Course
                 </th>
                 <th className="px-4 py-2 text-left text-sm font-medium text-gray-500">
                   Actions
@@ -342,7 +343,7 @@ const AdminDashboard = () => {
                 <tr key={mentor.id}>
                   <td className="px-4 py-2">{mentor.name}</td>
                   <td className="px-4 py-2">{mentor.email}</td>
-                  <td className="px-4 py-2">{mentor.specialty}</td>
+                  <td className="px-4 py-2">{mentor.course}</td>
                   <td className="px-4 py-2 text-right flex gap-2 justify-end">
                     <button
                       onClick={() => openEditModal(mentor, "Mentor")}
@@ -366,8 +367,8 @@ const AdminDashboard = () => {
 
       {/* Modal for Add/Edit */}
       {showModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg shadow-lg p-8 w-full max-w-md relative">
+        <div className="fixed inset-0 bg-blue-100 bg-opacity-70 flex items-center justify-center z-50">
+          <div className="bg-blue-50 rounded-lg shadow-lg p-8 w-full max-w-md relative">
             <button
               className="absolute top-2 right-2 text-gray-400 hover:text-gray-600"
               onClick={() => setShowModal(false)}
@@ -460,16 +461,16 @@ const AdminDashboard = () => {
                 <div>
                   <label
                     className="block text-gray-700 font-medium mb-1"
-                    htmlFor="specialty"
+                    htmlFor="course"
                   >
-                    Specialty
+                    Course
                   </label>
                   <input
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
                     type="text"
-                    id="specialty"
-                    name="specialty"
-                    value={form.specialty}
+                    id="course"
+                    name="course"
+                    value={form.course}
                     onChange={handleFormChange}
                     required
                   />
