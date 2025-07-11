@@ -197,13 +197,18 @@ const MenteeDashboard = () => {
                         }
                       />
                       <button
-                        className="mt-4 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-semibold transition"
-                        onClick={() => handleRequest(mentor.user_id)}
-                        disabled={requestStatus[mentor.user_id] === "pending"}
-                      >
-                        {requestStatus[mentor.user_id]
-                          ? `Requested (${requestStatus[mentor.user_id]})`
-                          : "Request Mentorship"}
+                      className={`mt-4 px-4 py-2 ${
+                        requestStatus[mentor.user_id] === "pending"
+                          ? "bg-green-600 hover:bg-green-700"
+                          : "bg-blue-600 hover:bg-blue-700"
+                      } text-white rounded-lg font-semibold transition`}
+                      onClick={() => handleRequest(mentor.user_id)}
+                      disabled={requestStatus[mentor.user_id] === "pending"}
+                    >
+                      {requestStatus[mentor.user_id]
+                        ? `Requested (${requestStatus[mentor.user_id]})`
+                        : "Request Mentorship"}
+                        
                       </button>
                     </div>
                   ))
