@@ -107,7 +107,8 @@ VITE_API_BASE_URL=http://localhost:5000/api
 
 ## 👥 Contributors
 
-- **Absolom Jr.** — [Your GitHub link or email]
+- **Absolom Orianga.** — absolomjr100@gmail.com
+- **Isaac Nabasa.** - nabasaisaac16@gmail.com
 - Open for collaboration! 🚀
 
 ---
@@ -122,4 +123,4 @@ This project is licensed under the **MIT License** — feel free to use, modify,
 
 - React Docs
 - Tailwind CSS Team
-- The entire CodeBuddy Dev Team & Mentorship Community ❤️
+
