@@ -107,7 +107,8 @@ VITE_API_BASE_URL=http://localhost:5000/api
 
 ## 👥 Contributors
 
-- **Absolom Jr.** — [Your GitHub link or email]
+- **Absolom Orianga.** — absolomjr100@gmail.com
+- **Isaac Nabasa.** - nabasaisaac16@gmail.com
 - Open for collaboration! 🚀
 
 ---
