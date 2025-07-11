@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../api";
 import { useUser } from "../context/UserContext";
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable"
 
 const initialForm = {
   name: "",
@@ -140,7 +142,33 @@ const AdminDashboard = () => {
     setReportError("");
     try {
       const res = await api.get("/admin/mentorship-requests-report");
-      setRequestsReport(res.data);
+      const data = res.data;
+  
+      // PDF Generation
+      const doc = new jsPDF();
+      doc.setFontSize(18);
+      doc.text("Mentorship Requests Report", 14, 20);
+      doc.setFontSize(12);
+      doc.setTextColor(100);
+  
+      autoTable(doc, {
+        startY: 30,
+        head: [["Request ID", "Mentee ID", "Mentor ID", "Description", "Status", "Created At"]],
+        body: data.map((req) => [
+          req.request_id,
+          req.mentee_id,
+          req.mentor_id,
+          req.description,
+          req.status,
+          new Date(req.created_at).toLocaleString(),
+        ]),
+        styles: { fontSize: 10 },
+      });
+  
+      doc.save("mentorship-requests-report.pdf");
+  
+      // Optionally show data in table below (if needed)
+      setRequestsReport(data);
       setShowRequestsReport(true);
     } catch (err) {
       setReportError("Failed to load mentorship requests report");
@@ -148,6 +176,7 @@ const AdminDashboard = () => {
       setLoadingReport(false);
     }
   };
+  
    
 
   return (
