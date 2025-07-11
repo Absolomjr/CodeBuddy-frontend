@@ -123,4 +123,4 @@ This project is licensed under the **MIT License** — feel free to use, modify,
 
 - React Docs
 - Tailwind CSS Team
-- The entire CodeBuddy Dev Team & Mentorship Community ❤️
+
