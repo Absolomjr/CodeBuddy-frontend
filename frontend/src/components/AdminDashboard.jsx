@@ -62,7 +62,7 @@ const AdminDashboard = () => {
     // eslint-disable-next-line
   }, []);
 
-  // Filter mentees and mentors in frontend
+  // Filtering mentees and mentors in frontend
   const filteredMentees = mentees.filter(
     (mentee) =>
       mentee.name.toLowerCase().includes(searchMentee.toLowerCase()) ||
