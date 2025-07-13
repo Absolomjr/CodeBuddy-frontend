@@ -11,7 +11,6 @@ const initialForm = {
   password: "",
   degree: "",
   role: "Mentee",
-//   specialty: "",
   course: "",
 };
 
@@ -167,7 +166,7 @@ const AdminDashboard = () => {
   
       doc.save("mentorship-requests-report.pdf");
   
-      // Optionally show data in table below (if needed)
+      // Optionally show data in table below 
       setRequestsReport(data);
       setShowRequestsReport(true);
     } catch (err) {
