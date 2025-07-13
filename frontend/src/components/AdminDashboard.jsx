@@ -11,7 +11,6 @@ const initialForm = {
   password: "",
   degree: "",
   role: "Mentee",
-//   specialty: "",
   course: "",
 };
 
@@ -62,7 +61,7 @@ const AdminDashboard = () => {
     // eslint-disable-next-line
   }, []);
 
-  // Filter mentees and mentors in frontend
+  // Filtering mentees and mentors in frontend
   const filteredMentees = mentees.filter(
     (mentee) =>
       mentee.name.toLowerCase().includes(searchMentee.toLowerCase()) ||
@@ -144,7 +143,7 @@ const AdminDashboard = () => {
       const res = await api.get("/admin/mentorship-requests-report");
       const data = res.data;
   
-      // PDF Generation
+      //  The generation of PDFS
       const doc = new jsPDF();
       doc.setFontSize(18);
       doc.text("Mentorship Requests Report", 14, 20);
@@ -167,7 +166,7 @@ const AdminDashboard = () => {
   
       doc.save("mentorship-requests-report.pdf");
   
-      // Optionally show data in table below (if needed)
+      // Optionally show data in table below 
       setRequestsReport(data);
       setShowRequestsReport(true);
     } catch (err) {
