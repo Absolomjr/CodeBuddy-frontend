@@ -144,7 +144,7 @@ const AdminDashboard = () => {
       const res = await api.get("/admin/mentorship-requests-report");
       const data = res.data;
   
-      // PDF Generation
+      //  The generation of PDFS
       const doc = new jsPDF();
       doc.setFontSize(18);
       doc.text("Mentorship Requests Report", 14, 20);
