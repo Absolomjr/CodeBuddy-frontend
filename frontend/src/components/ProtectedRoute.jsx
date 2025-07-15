@@ -1,15 +1,24 @@
 import { Navigate } from "react-router-dom";
 import { useUser } from "../context/UserContext";
 
+
+const roleDashboardMap ={
+  Mentee: "/mentee-dashboard",
+  Mentor: "/mentor-dashboard",
+  Admin: "/admin-dashboard",
+}
+
 const ProtectedRoute = ({ children, role }) => {
   const { user } = useUser();
 
   if (!user) {
     return <Navigate to="/login" replace />;
   }
-
+  
+  // logged in, but wrong role: redirect them to their actual dashboard
   if (role && user.role !== role) {
-    return <Navigate to="/unauthorized" replace />;
+    const redirectPath = getRedirectPath(user.role);
+    return <Navigate to={redirectPath} replace />;
   }
 
   return children;
