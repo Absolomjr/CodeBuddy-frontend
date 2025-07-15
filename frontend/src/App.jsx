@@ -15,6 +15,8 @@ import viteLogo from '/vite.svg'
 import './App.css'
 
 
+
+
 function App() {
   return (
     <UserProvider>
@@ -46,8 +48,10 @@ function App() {
             </ProtectedRoute>
           }
           />
-          {/* Redirect root to login */}
-          <Route path="/" element={<Navigate to="/login" replace />} />
+          {/* {/* Redirect root to login */}
+          <Route path="/" element={<Navigate to="/login" replace />} /> 
+
+          
         </Routes>
       </Router>
     </UserProvider>

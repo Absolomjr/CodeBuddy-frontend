@@ -203,8 +203,8 @@ const AdminDashboard = () => {
           <p className="text-2xl font-bold">{report.totalMentors || 0}</p>
         </div>
         <div className="bg-white p-4 rounded shadow">
-          <h2 className="text-lg font-semibold mb-2">Active Sessions</h2>
-          <p className="text-2xl font-bold">{report.activeSessions || 0}</p>
+          <h2 className="text-lg font-semibold mb-2">Pending</h2>
+          <p className="text-2xl font-bold">{report.Pending|| 0}</p>
         </div>
       </div>
       {/* Mentorship Requests Report Section */}
