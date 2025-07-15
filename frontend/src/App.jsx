@@ -48,7 +48,7 @@ function App() {
             </ProtectedRoute>
           }
           />
-          {/* {/* Redirect root to login */}
+          {/* {/* Default route redirects to login or can be customized */}
           <Route path="/" element={<Navigate to="/login" replace />} /> 
 
           

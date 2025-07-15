@@ -2,14 +2,9 @@ import { Navigate } from "react-router-dom";
 import { useUser } from "../context/UserContext";
 
 
-const roleDashboardMap ={
-  Mentee: "/mentee-dashboard",
-  Mentor: "/mentor-dashboard",
-  Admin: "/admin-dashboard",
-}
-
 const ProtectedRoute = ({ children, role }) => {
   const { user } = useUser();
+
 
   if (!user) {
     return <Navigate to="/login" replace />;
@@ -19,7 +14,8 @@ const ProtectedRoute = ({ children, role }) => {
   if (role && user.role !== role) {
     const redirectPath = getRedirectPath(user.role);
     return <Navigate to={redirectPath} replace />;
-  }
+    
+    }
 
   return children;
 };
