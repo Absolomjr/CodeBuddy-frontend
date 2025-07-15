@@ -5,6 +5,8 @@ import { useUser } from "../context/UserContext";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable"
 
+
+
 const initialForm = {
   name: "",
   email: "",
@@ -31,6 +33,9 @@ const AdminDashboard = () => {
   const [requestsReport, setRequestsReport] = useState([]);
   const [loadingReport, setLoadingReport] = useState(false);
   const [reportError, setReportError] = useState("");
+  const [showConfirmModal, setShowConfirmModal] = useState(false);// handles the customization of reports
+  const [confirmAction, setConfirmAction] = useState(null); // Callback when confirmed to print the reports
+
 
   useEffect(() => {
     if (!user || user.role !== "Admin") {
@@ -136,14 +141,22 @@ const AdminDashboard = () => {
     }
   };
 
-  const handleGenerateReport = async () => {
+
+  // Function to generate mentorship requests report
+  const confirmGenerateReport = () => {
+    setConfirmAction(() => generateReport);
+    setShowConfirmModal(true);
+  };
+  
+  const generateReport = async () => {
+    setShowConfirmModal(false); // Close confirmation modal
     setLoadingReport(true);
     setReportError("");
+  
     try {
       const res = await api.get("/admin/mentorship-requests-report");
       const data = res.data;
   
-      //  The generation of PDFS
       const doc = new jsPDF();
       doc.setFontSize(18);
       doc.text("Mentorship Requests Report", 14, 20);
@@ -166,7 +179,6 @@ const AdminDashboard = () => {
   
       doc.save("mentorship-requests-report.pdf");
   
-      // Optionally show data in table below 
       setRequestsReport(data);
       setShowRequestsReport(true);
     } catch (err) {
@@ -175,6 +187,7 @@ const AdminDashboard = () => {
       setLoadingReport(false);
     }
   };
+  
   
    
 
@@ -211,8 +224,10 @@ const AdminDashboard = () => {
       <div className="mb-8">
         <button
           className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 mb-2"
-          onClick={handleGenerateReport}
-          disabled={loadingReport}
+          onClick ={() => {
+            setConfirmAction(() => generateReport);
+            setShowConfirmModal(true);
+          }}
         >
           {loadingReport
             ? "Generating Report..."
@@ -531,7 +546,45 @@ const AdminDashboard = () => {
             </form>
           </div>
         </div>
+
       )}
+
+{/* confirmation for the generation of reports */}
+{showConfirmModal && (
+  <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
+    <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-sm text-center">
+      <h3 className="text-xl font-semibold text-gray-800 mb-4">
+        Confirm Report Generation
+      </h3>
+      <p className="text-gray-600 mb-6">
+        Are you sure you want to generate and download the mentorship requests report?
+      </p>
+      <div className="flex justify-center gap-4">
+        <button
+          onClick={() => {
+            if (confirmAction) confirmAction();
+            setShowConfirmModal(false);
+          }}
+          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+        >
+          Yes, Generate
+        </button>
+        <button
+          onClick={() => setShowConfirmModal(false)}
+          className="bg-gray-300 text-gray-700 px-4 py-2 rounded hover:bg-gray-400"
+        >
+          Cancel
+        </button>
+      </div>
+    </div>
+  </div>
+)}
+
+
+
+      
+
+
     </div>
   );
 };
