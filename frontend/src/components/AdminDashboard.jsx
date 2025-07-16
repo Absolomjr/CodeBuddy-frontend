@@ -410,10 +410,10 @@ const AdminDashboard = () => {
 
       {/* Modal for Add/Edit */}
       {showModal && (
-        <div className="fixed inset-0 bg-blue-100 bg-opacity-70 flex items-center justify-center z-50">
-          <div className="bg-blue-50 rounded-lg shadow-lg p-8 w-full max-w-md relative">
+        <div className="absolute top-1/4 left-1/2 transform -translate-x-1/2 z-50">
+          <div className="bg-white rounded-lg shadow-xl p-8 w-full max-w-md relative border border-gray-300">
             <button
-              className="absolute top-2 right-2 text-gray-400 hover:text-gray-600"
+              className="absolute top-2 right-2 text-gray-400 hover:text-gray-600 text-xl"
               onClick={() => setShowModal(false)}
             >
               &times;
@@ -431,7 +431,7 @@ const AdminDashboard = () => {
                   Name
                 </label>
                 <input
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
                   type="text"
                   id="name"
                   name="name"
@@ -448,7 +448,7 @@ const AdminDashboard = () => {
                   Email
                 </label>
                 <input
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
                   type="email"
                   id="email"
                   name="email"
@@ -466,7 +466,7 @@ const AdminDashboard = () => {
                     Password
                   </label>
                   <input
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
                     type="password"
                     id="password"
                     name="password"
@@ -485,7 +485,7 @@ const AdminDashboard = () => {
                     Degree
                   </label>
                   <select
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
                     id="degree"
                     name="degree"
                     value={form.degree}
@@ -509,7 +509,7 @@ const AdminDashboard = () => {
                     Course
                   </label>
                   <input
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
                     type="text"
                     id="course"
                     name="course"
@@ -527,7 +527,7 @@ const AdminDashboard = () => {
                     Course
                   </label>
                   <input
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
                     type="text"
                     id="course"
                     name="course"
