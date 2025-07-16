@@ -551,31 +551,29 @@ const AdminDashboard = () => {
 
 {/* confirmation for the generation of reports */}
 {showConfirmModal && (
-  <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
-    <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-sm text-center">
-      <h3 className="text-xl font-semibold text-gray-800 mb-4">
-        Confirm Report Generation
-      </h3>
-      <p className="text-gray-600 mb-6">
-        Are you sure you want to generate and download the mentorship requests report?
-      </p>
-      <div className="flex justify-center gap-4">
-        <button
-          onClick={() => {
-            if (confirmAction) confirmAction();
-            setShowConfirmModal(false);
-          }}
-          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-        >
-          Yes, Generate
-        </button>
-        <button
-          onClick={() => setShowConfirmModal(false)}
-          className="bg-gray-300 text-gray-700 px-4 py-2 rounded hover:bg-gray-400"
-        >
-          Cancel
-        </button>
-      </div>
+  <div className="absolute top-1/4 left-1/2 transform -translate-x-1/2 z-50 bg-white border border-gray-300 shadow-lg rounded-lg p-6 w-full max-w-sm text-center">
+    <h3 className="text-xl font-semibold text-gray-800 mb-4">
+      Confirm Report Generation
+    </h3>
+    <p className="text-gray-600 mb-6">
+      Are you sure you want to generate and download the mentorship requests report?
+    </p>
+    <div className="flex justify-center gap-4">
+      <button
+        onClick={() => {
+          if (confirmAction) confirmAction();
+          setShowConfirmModal(false);
+        }}
+        className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+      >
+        Yes, Generate
+      </button>
+      <button
+        onClick={() => setShowConfirmModal(false)}
+        className="bg-gray-300 text-gray-700 px-4 py-2 rounded hover:bg-gray-400"
+      >
+        Cancel
+      </button>
     </div>
   </div>
 )}
