@@ -1,6 +1,7 @@
 import React from "react";
 import DashboardContent from "../components/DashboardContent";
 import Sidebar from "../components/sidebar";
+import Reports from "../components/Reports";
 
 const AdminDashboard = () => {
     return (
