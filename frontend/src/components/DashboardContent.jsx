@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { FaUserGraduate, FaChalkboardTeacher, FaPlus } from "react-icons/fa";
@@ -99,7 +98,7 @@ const DashboardContent = () => {
 
       {/* Modal */}
       {showModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
+        <div className="fixed inset-0 z-50 flex items-center justify-center">
           <div className="bg-white p-8 rounded-2xl shadow-xl w-full max-w-xl relative">
             <button onClick={() => setShowModal(false)} className="absolute top-3 right-4 text-gray-400 text-2xl hover:text-gray-600">
               &times;
