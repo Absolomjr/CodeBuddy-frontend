@@ -1,4 +1,4 @@
-// src/components/DashboardContent.jsx
+
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { FaUserGraduate, FaChalkboardTeacher, FaPlus } from "react-icons/fa";
