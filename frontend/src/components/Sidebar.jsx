@@ -46,15 +46,30 @@ const Sidebar = () => {
         <SidebarLink
           to="/view-users"
           icon={<FaUsers />}
-          label="View Users"
+          label="Mentees"
           activePath={location.pathname}
         />
+        <SidebarLink
+          to="/add-mentor"
+          icon={<FaUserPlus />}
+          label="Mentors"
+          activePath={location.pathname}
+        />
+
         <SidebarLink
           to="/reports"
           icon={<FaUserPlus />}
           label="Reports"
           activePath={location.pathname}
         />
+
+        <SidebarLink
+          to="/settings"
+          icon ={<FaUserPlus />} 
+          label= "Reports"
+          activePath={location.pathname}
+        />
+        
       </nav>
 
       <button
