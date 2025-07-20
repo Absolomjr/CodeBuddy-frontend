@@ -8,7 +8,7 @@ import MentorDashboard from "./components/MentorDashboard";
 import { UserProvider, useUser } from "./context/UserContext";
 import ProtectedRoute from "./components/ProtectedRoute";
 import AdminDashboard from "./pages/AdminDashboard" 
-import MenteesDashboard from "./components/MenteeDashboard";
+import MenteesDashboard from "./components/mentees/MenteesDashboard";
 
 
 import reactLogo from './assets/react.svg'
