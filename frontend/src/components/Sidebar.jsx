@@ -44,7 +44,7 @@ const Sidebar = () => {
           activePath={location.pathname}
         />
         <SidebarLink
-          to="/view-users"
+          to="/mentees"
           icon={<FaUsers />}
           label="Mentees"
           activePath={location.pathname}
@@ -66,7 +66,7 @@ const Sidebar = () => {
         <SidebarLink
           to="/settings"
           icon ={<FaUserPlus />} 
-          label= "Reports"
+          label= "Settings"
           activePath={location.pathname}
         />
         

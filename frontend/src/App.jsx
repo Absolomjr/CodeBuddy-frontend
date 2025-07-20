@@ -8,7 +8,7 @@ import MentorDashboard from "./components/MentorDashboard";
 import { UserProvider, useUser } from "./context/UserContext";
 import ProtectedRoute from "./components/ProtectedRoute";
 import AdminDashboard from "./pages/AdminDashboard" 
-
+import MenteesDashboard from "./components/MenteeDashboard";
 
 
 import reactLogo from './assets/react.svg'
@@ -49,6 +49,18 @@ function App() {
             </ProtectedRoute>
           }
           />
+
+          
+          {/* Protected Mentees Dashboard for Admin */}
+          <Route path="/mentees"
+          element={ 
+          <ProtectedRoute role="Admin">
+            <MenteesDashboard />
+          </ProtectedRoute>
+          }
+          />
+
+      
           {/* {/* Default route redirects to login or can be customized */}
           <Route path="/" element={<Navigate to="/login" replace />} /> 
 
