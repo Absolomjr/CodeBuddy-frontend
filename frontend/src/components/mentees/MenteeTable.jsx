@@ -3,34 +3,37 @@ import MenteeActions from "./MenteeActions";
 
 const MenteeTable = () => {
   const mentees = [
-    { id: 1, name: "Absolom Jr", email: "absolom@example.com", cohort: "2025" },
-    { id: 2, name: "Jane Doe", email: "jane@example.com", cohort: "2024" },
+    { id: 1, name: "Absolom Jr", email: "absolom@gmail.com", year: "2025" },
+    { id: 2, name: "Isaac  Nabasa", email: "isaac@gmail.com", year: "2024" },
   ];
 
   return (
-    <table className="min-w-full table-auto border">
-      <thead className="bg-blue-700 text-white">
-        <tr>
-          <th className="p-2">Name</th>
-          <th className="p-2">Email</th>
-          <th className="p-2">Cohort</th>
-          <th className="p-2">Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        {mentees.map((mentee) => (
-          <tr key={mentee.id} className="border-t">
-            <td className="p-2">{mentee.name}</td>
-            <td className="p-2">{mentee.email}</td>
-            <td className="p-2">{mentee.cohort}</td>
-            <td className="p-2">
-              <MenteeActions mentee={mentee} />
-            </td>
+    <div className="overflow-x-auto shadow rounded-lg">
+      <table className="min-w-full divide-y divide-gray-200">
+        <thead className="bg-blue-700 text-white">
+          <tr>
+            <th className="px-4 py-2 text-left">Name</th>
+            <th className="px-4 py-2 text-left">Email</th>
+            <th className="px-4 py-2 text-left">Year</th>
+            <th className="px-4 py-2 text-left">Actions</th>
           </tr>
-        ))}
-      </tbody>
-    </table>
+        </thead>
+        <tbody className="bg-white divide-y divide-gray-100">
+          {mentees.map((mentee) => (
+            <tr key={mentee.id}>
+              <td className="px-4 py-2 whitespace-nowrap">{mentee.name}</td>
+              <td className="px-4 py-2 whitespace-nowrap">{mentee.email}</td>
+              <td className="px-4 py-2 whitespace-nowrap">{mentee.year}</td>
+              <td className="px-4 py-2 whitespace-nowrap">
+                <MenteeActions mentee={mentee} />
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
   );
 };
 
 export default MenteeTable;
+
