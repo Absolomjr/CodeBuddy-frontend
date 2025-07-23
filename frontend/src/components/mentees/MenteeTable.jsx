@@ -1,21 +1,8 @@
-import React, { useState } from "react";
+import React from "react";
 import MenteeActions from "./MenteeActions";
 import StatusButtons from "./StatusButtons";
 
-const MenteeTable = () => {
-  const [mentees, setMentees] = useState([
-    { id: 1, name: "Absolom Jr", email: "absolom@gmail.com", year: "2025", status: "Active" },
-    { id: 2, name: "Isaac Nabasa", email: "isaac@gmail.com", year: "2024", status: "Pending" },
-  ]);
-
-  // Update status handler
-  const updateStatus = (id, newStatus) => {
-    const updatedMentees = mentees.map((mentee) =>
-      mentee.id === id ? { ...mentee, status: newStatus } : mentee
-    );
-    setMentees(updatedMentees);
-  };
-
+const MenteeTable = ({ mentees, updateStatus }) => {
   return (
     <div className="overflow-x-auto shadow rounded-lg">
       <table className="min-w-full divide-y divide-gray-200">
