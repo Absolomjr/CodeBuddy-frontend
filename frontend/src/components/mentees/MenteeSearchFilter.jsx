@@ -5,7 +5,7 @@ const MenteeSearchFilter = () => {
     <div className="flex gap-4">
       <input type="text" placeholder="Search mentees..." className="border p-2 rounded w-full" />
       <select className="border p-2 rounded">
-        <option value="">All Cohorts</option>
+        <option value="">All Years</option>
         <option value="2025">2025</option>
         <option value="2024">2024</option>
       </select>

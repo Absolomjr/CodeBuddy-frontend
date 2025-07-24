@@ -1,12 +1,8 @@
 import React from "react";
 import MenteeActions from "./MenteeActions";
+import StatusButtons from "./StatusButtons";
 
-const MenteeTable = () => {
-  const mentees = [
-    { id: 1, name: "Absolom Jr", email: "absolom@gmail.com", year: "2025" },
-    { id: 2, name: "Isaac  Nabasa", email: "isaac@gmail.com", year: "2024" },
-  ];
-
+const MenteeTable = ({ mentees, updateStatus }) => {
   return (
     <div className="overflow-x-auto shadow rounded-lg">
       <table className="min-w-full divide-y divide-gray-200">
@@ -15,6 +11,7 @@ const MenteeTable = () => {
             <th className="px-4 py-2 text-left">Name</th>
             <th className="px-4 py-2 text-left">Email</th>
             <th className="px-4 py-2 text-left">Year</th>
+            <th className="px-4 py-2 text-left">Status</th>
             <th className="px-4 py-2 text-left">Actions</th>
           </tr>
         </thead>
@@ -24,6 +21,9 @@ const MenteeTable = () => {
               <td className="px-4 py-2 whitespace-nowrap">{mentee.name}</td>
               <td className="px-4 py-2 whitespace-nowrap">{mentee.email}</td>
               <td className="px-4 py-2 whitespace-nowrap">{mentee.year}</td>
+              <td className="px-4 py-2 whitespace-nowrap">
+                <StatusButtons mentee={mentee} onStatusChange={updateStatus} />
+              </td>
               <td className="px-4 py-2 whitespace-nowrap">
                 <MenteeActions mentee={mentee} />
               </td>
@@ -36,4 +36,3 @@ const MenteeTable = () => {
 };
 
 export default MenteeTable;
-
