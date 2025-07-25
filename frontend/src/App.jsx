@@ -60,6 +60,8 @@ function App() {
           }
           />
 
+          
+
       
           {/* {/* Default route redirects to login or can be customized */}
           <Route path="/" element={<Navigate to="/login" replace />} /> 

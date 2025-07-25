@@ -1,26 +1,31 @@
 import React from "react";
 import { FaUsers, FaUserCheck, FaUserClock, FaUserPlus } from "react-icons/fa";
 
-const MenteeStatsCard = () => {
+const MenteeStatsCard = ({ mentees }) => {
+  const total = mentees.length;
+  const active = mentees.filter((m) => m.status === "Active").length;
+  const unassigned = mentees.filter((m) => m.status !== "Active").length;
+  const recent = mentees.slice(-5).length;
+
   const stats = [
     {
       title: "Total Mentees",
-      count: 124,
+      count: total,
       icon: <FaUsers className="text-blue-600 text-2xl" />,
     },
     {
       title: "Active Mentees",
-      count: 98,
+      count: active,
       icon: <FaUserCheck className="text-green-600 text-2xl" />,
     },
     {
       title: "Unassigned Mentees",
-      count: 26,
+      count: unassigned,
       icon: <FaUserClock className="text-yellow-600 text-2xl" />,
     },
     {
       title: "Recently Added",
-      count: 5,
+      count: recent,
       icon: <FaUserPlus className="text-purple-600 text-2xl" />,
     },
   ];
@@ -44,3 +49,4 @@ const MenteeStatsCard = () => {
 };
 
 export default MenteeStatsCard;
+
