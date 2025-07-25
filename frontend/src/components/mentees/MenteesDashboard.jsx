@@ -6,13 +6,35 @@ import AddMenteeModal from "./AddMenteeModal";
 import { FaPlus } from "react-icons/fa";
 import jsPDF from "jspdf";
 import "jspdf-autotable"; // For table support
+import { useEffect, useState } from "react";
+import axiosInstance from "../../utils/axiosInstance";
 
+
+// const MenteesDashboard = () => {
+//   const [mentees, setMentees] = useState([
+//     { id: 1, name: "Absolom Jr", email: "absolom@gmail.com", year: "2025", status: "Active" },
+//     { id: 2, name: "Isaac Nabasa", email: "isaac@gmail.com", year: "2024", status: "Pending" },
+//   ]);
 
 const MenteesDashboard = () => {
-  const [mentees, setMentees] = useState([
-    { id: 1, name: "Absolom Jr", email: "absolom@gmail.com", year: "2025", status: "Active" },
-    { id: 2, name: "Isaac Nabasa", email: "isaac@gmail.com", year: "2024", status: "Pending" },
-  ]);
+  const [mentees, setMentees] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  const fetchMentees = async () => {
+    try {
+      const response = await axiosInstance.get("/admin/mentees");
+      setMentees(response.data);
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fetching mentees:", error);
+    }
+  };
+
+
+  useEffect(() => {
+    fetchMentees();
+  }, []);
+
 
   const [showAddModal, setShowAddModal] = useState(false);
   const [form, setForm] = useState({ name: "", email: "", password: "", year: "", degree: "" });
@@ -61,12 +83,37 @@ const MenteesDashboard = () => {
     doc.save("mentee-report.pdf");
   };
 
+  const MenteeStatsCard = ({ mentees }) => {
+    const total = mentees.length;
+    const active = mentees.filter((m) => m.status === "Active").length;
+    const unassigned = mentees.filter((m) => !m.mentor).length; // adjust based on your schema
+
+    return (
+      <div className="grid grid-cols-3 gap-4">
+        <div className="bg-white shadow rounded p-4">
+          <p className="text-sm text-gray-500">Total Mentees</p>
+          <p className="text-xl font-bold">{total}</p>
+        </div>
+        <div className="bg-white shadow rounded p-4">
+          <p className="text-sm text-gray-500">Active Mentees</p>
+          <p className="text-xl font-bold">{active}</p>
+        </div>
+        <div className="bg-white shadow rounded p-4">
+          <p className="text-sm text-gray-500">Unassigned Mentees</p>
+          <p className="text-xl font-bold">{unassigned}</p>
+        </div>
+      </div>
+    );
+  };
+
+
+
 
   return (
     <div className="p-4 space-y-4">
       <h2 className="text-2xl font-bold">Manage Mentees</h2>
 
-      <MenteeStatsCard />
+      <MenteeStatsCard mentees={mentees} />
       <MenteeSearchFilter />
 
       <div className="flex justify-between items-center mb-2">
