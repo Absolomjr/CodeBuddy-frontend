@@ -6,7 +6,7 @@ import AddMenteeModal from "./AddMenteeModal";
 import { FaPlus } from "react-icons/fa";
 import jsPDF from "jspdf";
 import "jspdf-autotable"; // For table support
-import { useEffect, useState } from "react";
+import { useEffect, } from "react";
 import axiosInstance from "../../utils/axiosInstance";
 
 
