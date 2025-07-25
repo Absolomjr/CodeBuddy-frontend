@@ -9,13 +9,6 @@ import "jspdf-autotable"; // For table support
 import { useEffect, } from "react";
 import axiosInstance from "../../utils/axiosInstance";
 
-
-// const MenteesDashboard = () => {
-//   const [mentees, setMentees] = useState([
-//     { id: 1, name: "Absolom Jr", email: "absolom@gmail.com", year: "2025", status: "Active" },
-//     { id: 2, name: "Isaac Nabasa", email: "isaac@gmail.com", year: "2024", status: "Pending" },
-//   ]);
-
 const MenteesDashboard = () => {
   const [mentees, setMentees] = useState([]);
   const [loading, setLoading] = useState(true);
