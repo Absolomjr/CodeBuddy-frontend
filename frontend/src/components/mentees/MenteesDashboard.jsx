@@ -37,20 +37,26 @@ const MenteesDashboard = () => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleAddMentee = (e) => {
+  const handleAddMentee = async (e) => {
     e.preventDefault();
-    const newMentee = {
-      id: mentees.length + 1,
-      name: form.name,
-      email: form.email,
-      year: form.year,
-      degree: form.degree,
-      status: "Pending", // default status
-    };
-    setMentees([...mentees, newMentee]);
-    setShowAddModal(false);
-    setForm({ name: "", email: "", password: "", year: "", degree: "" });
+  
+    try {
+      const response = await axiosInstance.post("/admin/mentees", form); // ✅ POST to backend
+      console.log("Mentee added:", response.data);
+  
+      // Refreshing the mentees list
+      fetchMentees();
+  
+      // Reseting UI
+      setShowAddModal(false);
+      setForm({ name: "", email: "", password: "", year: "", degree: "" });
+  
+    } catch (error) {
+      console.error("Error adding mentee:", error);
+      alert("Failed to add mentee. Please try again.");
+    }
   };
+  
 
   const handleStatusUpdate = (id, newStatus) => {
     const updated = mentees.map((m) => (m.id === id ? { ...m, status: newStatus } : m));
