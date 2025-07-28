@@ -34,15 +34,7 @@ const AddMenteeModal = ({ isOpen, onClose, form, onChange, onSubmit, loading }) 
           required
           className="w-full border px-3 py-2 rounded"
         />
-        <input
-          type="text"
-          name="year"
-          placeholder="Graduation Year"
-          value={form.year}
-          onChange={onChange}
-          required
-          className="w-full border px-3 py-2 rounded"
-        />
+       
         <input
           type="text"
           name="degree"

@@ -1,68 +1,74 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import MenteeStatsCard from "./MenteeStatsCard";
 import MenteeSearchFilter from "./MenteeSearchFilter";
 import MenteeTable from "./MenteeTable";
 import AddMenteeModal from "./AddMenteeModal";
 import { FaPlus } from "react-icons/fa";
 import jsPDF from "jspdf";
-import "jspdf-autotable"; // For table support
-import { useEffect, } from "react";
+import "jspdf-autotable";
 import axiosInstance from "../../utils/axiosInstance";
 
 const MenteesDashboard = () => {
   const [mentees, setMentees] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [form, setForm] = useState({
+    name: "",
+    email: "",
+    password: "",
+    year: "",
+    degree: "",
+  });
+  const [showConfirm, setShowConfirm] = useState(false);
 
+  // ✅ Fetch mentees from backend
   const fetchMentees = async () => {
     try {
-      const response = await axiosInstance.get("/admin/mentees");
+      const response = await axiosInstance.get("/admin/mentees"); // ✅ FIXED endpoint
       setMentees(response.data);
-      setLoading(false);
     } catch (error) {
       console.error("Error fetching mentees:", error);
+    } finally {
+      setLoading(false);
     }
   };
-
 
   useEffect(() => {
     fetchMentees();
   }, []);
 
-
-  const [showAddModal, setShowAddModal] = useState(false);
-  const [form, setForm] = useState({ name: "", email: "", password: "", year: "", degree: "" });
-  const [showConfirm, setShowConfirm] = useState(false);
-
+  // ✅ Handle input change
   const handleFormChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
+  // ✅ Add a new mentee
   const handleAddMentee = async (e) => {
     e.preventDefault();
-  
+    setLoading(true);
     try {
-      const response = await axiosInstance.post("/admin/mentees", form); // ✅ POST to backend
-      console.log("Mentee added:", response.data);
-  
-      // Refreshing the mentees list
+      await axiosInstance.post("/admin/mentee", form); // ✅ POST is singular
       fetchMentees();
-  
-      // Reseting UI
       setShowAddModal(false);
       setForm({ name: "", email: "", password: "", year: "", degree: "" });
-  
+      alert("Mentee added successfully!");
     } catch (error) {
       console.error("Error adding mentee:", error);
       alert("Failed to add mentee. Please try again.");
+    } finally {
+      setLoading(false);
     }
   };
-  
 
+  // ✅ Update mentee status locally
   const handleStatusUpdate = (id, newStatus) => {
-    const updated = mentees.map((m) => (m.id === id ? { ...m, status: newStatus } : m));
+    const updated = mentees.map((m) =>
+      m.id === id ? { ...m, status: newStatus } : m
+    );
     setMentees(updated);
   };
-  //handleGenerateReport logic
+
+  // ✅ Generate mentee report
   const handleGenerateReport = () => {
     const doc = new jsPDF();
 
@@ -75,38 +81,12 @@ const MenteesDashboard = () => {
         mentee.email,
         mentee.year,
         mentee.degree || "N/A",
-        mentee.status,
+        mentee.status || "N/A",
       ]),
     });
 
     doc.save("mentee-report.pdf");
   };
-
-  const MenteeStatsCard = ({ mentees }) => {
-    const total = mentees.length;
-    const active = mentees.filter((m) => m.status === "Active").length;
-    const unassigned = mentees.filter((m) => !m.mentor).length; // adjust based on your schema
-
-    return (
-      <div className="grid grid-cols-3 gap-4">
-        <div className="bg-white shadow rounded p-4">
-          <p className="text-sm text-gray-500">Total Mentees</p>
-          <p className="text-xl font-bold">{total}</p>
-        </div>
-        <div className="bg-white shadow rounded p-4">
-          <p className="text-sm text-gray-500">Active Mentees</p>
-          <p className="text-xl font-bold">{active}</p>
-        </div>
-        <div className="bg-white shadow rounded p-4">
-          <p className="text-sm text-gray-500">Unassigned Mentees</p>
-          <p className="text-xl font-bold">{unassigned}</p>
-        </div>
-      </div>
-    );
-  };
-
-
-
 
   return (
     <div className="p-4 space-y-4">
@@ -116,7 +96,7 @@ const MenteesDashboard = () => {
       <MenteeSearchFilter />
 
       <div className="flex justify-between items-center mb-2">
-        {/* Add Mentee */}
+        {/* Add Mentee Button */}
         <button
           onClick={() => setShowAddModal(true)}
           className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
@@ -124,7 +104,7 @@ const MenteesDashboard = () => {
           <FaPlus /> Add Mentee
         </button>
 
-        {/* Generate Report */}
+        {/* Generate Report Button */}
         <button
           onClick={() => setShowConfirm(true)}
           className="flex items-center gap-2 bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
@@ -133,10 +113,15 @@ const MenteesDashboard = () => {
         </button>
       </div>
 
+      {/* Confirm Report Modal */}
       {showConfirm && (
         <div className="fixed top-20 left-1/2 transform -translate-x-1/2 bg-white border border-gray-300 rounded-lg shadow-lg z-50 w-[90%] max-w-md p-6">
-          <h3 className="text-lg font-semibold mb-3">Confirm Report Generation</h3>
-          <p className="mb-4 text-gray-700">Are you sure you want to generate the mentee report?</p>
+          <h3 className="text-lg font-semibold mb-3">
+            Confirm Report Generation
+          </h3>
+          <p className="mb-4 text-gray-700">
+            Are you sure you want to generate the mentee report?
+          </p>
           <div className="flex justify-end gap-4">
             <button
               onClick={() => {
@@ -157,13 +142,10 @@ const MenteesDashboard = () => {
         </div>
       )}
 
-
-
-
       {/* Mentee Table */}
       <MenteeTable mentees={mentees} updateStatus={handleStatusUpdate} />
 
-      {/* Modal */}
+      {/* Add Mentee Modal */}
       <AddMenteeModal
         isOpen={showAddModal}
         onClose={() => setShowAddModal(false)}
