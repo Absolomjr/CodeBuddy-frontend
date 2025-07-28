@@ -3,13 +3,15 @@ import {
   FaTachometerAlt,
   FaUsers,
   FaUserPlus,
+  FaChartBar,
+  FaCog,
   FaSignOutAlt,
 } from "react-icons/fa";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 
 // Reusable sidebar link
 const SidebarLink = ({ to, icon, label, activePath }) => {
-  const isActive = activePath === to;
+  const isActive = activePath === to || activePath.startsWith(to + "/");
   return (
     <Link
       to={to}
@@ -44,32 +46,29 @@ const Sidebar = () => {
           activePath={location.pathname}
         />
         <SidebarLink
-          to="/mentees"
+          to="/admin-dashboard/mentees"
           icon={<FaUsers />}
           label="Mentees"
           activePath={location.pathname}
         />
         <SidebarLink
-          to="/add-mentor"
+          to="/admin-dashboard/add-mentor"
           icon={<FaUserPlus />}
           label="Mentors"
           activePath={location.pathname}
         />
-
         <SidebarLink
-          to="/reports"
-          icon={<FaUserPlus />}
+          to="/admin-dashboard/reports"
+          icon={<FaChartBar />}
           label="Reports"
           activePath={location.pathname}
         />
-
         <SidebarLink
-          to="/settings"
-          icon ={<FaUserPlus />} 
-          label= "Settings"
+          to="/admin-dashboard/settings"
+          icon={<FaCog />}
+          label="Settings"
           activePath={location.pathname}
         />
-        
       </nav>
 
       <button
