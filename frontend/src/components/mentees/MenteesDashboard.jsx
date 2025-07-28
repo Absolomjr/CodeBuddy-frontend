@@ -7,6 +7,7 @@ import { FaPlus } from "react-icons/fa";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 import axiosInstance from "../../utils/axiosInstance";
+import { toast } from "react-toastify";
 
 const MenteesDashboard = () => {
   const [mentees, setMentees] = useState([]);
@@ -20,11 +21,12 @@ const MenteesDashboard = () => {
     degree: "",
   });
   const [showConfirm, setShowConfirm] = useState(false);
+  const [loadingMenteeId, setLoadingMenteeId] = useState(null);
 
   // ✅ Fetch mentees from backend
   const fetchMentees = async () => {
     try {
-      const response = await axiosInstance.get("/admin/mentees"); // ✅ FIXED endpoint
+      const response = await axiosInstance.get("/admin/mentees");
       setMentees(response.data);
     } catch (error) {
       console.error("Error fetching mentees:", error);
@@ -47,44 +49,63 @@ const MenteesDashboard = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      await axiosInstance.post("/admin/mentee", form); // ✅ POST is singular
-      fetchMentees();
+      await axiosInstance.post("/admin/mentee", form);
+      toast.success("Mentee added successfully!");
+      fetchMentees(); // Refresh list
       setShowAddModal(false);
       setForm({ name: "", email: "", password: "", year: "", degree: "" });
-      alert("Mentee added successfully!");
     } catch (error) {
       console.error("Error adding mentee:", error);
-      alert("Failed to add mentee. Please try again.");
+      toast.error("Failed to add mentee.");
     } finally {
       setLoading(false);
     }
   };
 
-  // ✅ Update mentee status locally
-  const handleStatusUpdate = (id, newStatus) => {
-    const updated = mentees.map((m) =>
-      m.id === id ? { ...m, status: newStatus } : m
-    );
-    setMentees(updated);
+  // ✅ Edit mentee
+  const handleEditMentee = async (id, updatedData) => {
+    try {
+      setLoadingMenteeId(id);
+      const response = await axiosInstance.put(`/mentees/${id}`, updatedData);
+      const updated = response.data;
+      setMentees((prev) =>
+        prev.map((mentee) => (mentee._id === id ? updated : mentee))
+      );
+      toast.success("Mentee updated successfully!");
+    } catch (error) {
+      toast.error("Failed to update mentee.");
+    } finally {
+      setLoadingMenteeId(null);
+    }
   };
 
-  // ✅ Generate mentee report
+  // ✅ Delete mentee
+  const handleDeleteMentee = async (id) => {
+    try {
+      setLoadingMenteeId(id);
+      await axiosInstance.delete(`/mentees/${id}`);
+      setMentees((prev) => prev.filter((mentee) => mentee._id !== id));
+      toast.success("Mentee deleted successfully!");
+    } catch (error) {
+      toast.error("Failed to delete mentee.");
+    } finally {
+      setLoadingMenteeId(null);
+    }
+  };
+
+  // ✅ Generate PDF Report
   const handleGenerateReport = () => {
     const doc = new jsPDF();
-
     doc.text("Mentee Report", 14, 15);
     doc.autoTable({
-      head: [["ID", "Name", "Email", "Year", "Degree", "Status"]],
-      body: mentees.map((mentee) => [
-        mentee.id,
-        mentee.name,
-        mentee.email,
-        mentee.year,
-        mentee.degree || "N/A",
-        mentee.status || "N/A",
+      head: [["Name", "Email", "Year", "Degree"]],
+      body: mentees.map((m) => [
+        m.name,
+        m.email,
+        m.year || "N/A",
+        m.degree || "N/A",
       ]),
     });
-
     doc.save("mentee-report.pdf");
   };
 
@@ -96,15 +117,12 @@ const MenteesDashboard = () => {
       <MenteeSearchFilter />
 
       <div className="flex justify-between items-center mb-2">
-        {/* Add Mentee Button */}
         <button
           onClick={() => setShowAddModal(true)}
           className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
         >
           <FaPlus /> Add Mentee
         </button>
-
-        {/* Generate Report Button */}
         <button
           onClick={() => setShowConfirm(true)}
           className="flex items-center gap-2 bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
@@ -116,9 +134,7 @@ const MenteesDashboard = () => {
       {/* Confirm Report Modal */}
       {showConfirm && (
         <div className="fixed top-20 left-1/2 transform -translate-x-1/2 bg-white border border-gray-300 rounded-lg shadow-lg z-50 w-[90%] max-w-md p-6">
-          <h3 className="text-lg font-semibold mb-3">
-            Confirm Report Generation
-          </h3>
+          <h3 className="text-lg font-semibold mb-3">Confirm Report Generation</h3>
           <p className="mb-4 text-gray-700">
             Are you sure you want to generate the mentee report?
           </p>
@@ -143,7 +159,11 @@ const MenteesDashboard = () => {
       )}
 
       {/* Mentee Table */}
-      <MenteeTable mentees={mentees} updateStatus={handleStatusUpdate} />
+      <MenteeTable
+        mentees={mentees}
+        onEdit={handleEditMentee}
+        onDelete={handleDeleteMentee}
+      />
 
       {/* Add Mentee Modal */}
       <AddMenteeModal

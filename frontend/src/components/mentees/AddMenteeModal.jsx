@@ -34,15 +34,19 @@ const AddMenteeModal = ({ isOpen, onClose, form, onChange, onSubmit, loading }) 
           required
           className="w-full border px-3 py-2 rounded"
         />
-       
-        <input
-          type="text"
+
+        <select
           name="degree"
-          placeholder="Degree Program"
           value={form.degree}
           onChange={onChange}
           className="w-full border px-3 py-2 rounded"
-        />
+          required
+        >
+          <option value="">Select Degree Program</option>
+          <option value="BSCS">BSCS</option>
+          <option value="BSIT">BSIT</option>
+          <option value="BSDS">BSDS</option>
+        </select>
 
         <div className="flex justify-end gap-4">
           <button
