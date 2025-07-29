@@ -10,11 +10,11 @@ import AdminDashboard from "./pages/AdminDashboard";
 import DashboardContent from "./components/DashboardContent";
 import MenteesDashboard from "./components/mentees/MenteesDashboard";
 import Reports from "./components/Reports";
-
 import reactLogo from "./assets/react.svg";
 import viteLogo from "/vite.svg";
 import "./App.css";
 import AddMentor from "./components/admin/AddMentor";
+import Settings from "./components/admin/Settings";
 
 function App() {
   return (
@@ -55,7 +55,7 @@ function App() {
             <Route path="mentees" element={<MenteesDashboard />} />
             <Route path="add-mentor" element={<AddMentor />} />
             <Route path="reports" element={<Reports />} />
-            {/* <Route path="settings" element={<Settings />} /> */}
+            <Route path="settings" element={<Settings />} />
           </Route>
           {/* Default route redirects to login */}
           <Route path="/" element={<Navigate to="/login" replace />} />
