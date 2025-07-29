@@ -1,60 +1,199 @@
 import React, { useEffect, useState } from "react";
-import { FaDownload, FaFilter } from "react-icons/fa";
-import { Bar, Pie } from "react-chartjs-2";
-import "chart.js/auto";
+import { FaDownload, FaFilter, FaSearch } from "react-icons/fa";
+import api from "../api";
+import { jsPDF } from "jspdf";
+import "jspdf-autotable";
 
 const Reports = () => {
-  const [reportData, setReportData] = useState([]);
+  const [requests, setRequests] = useState([]);
+  const [filteredRequests, setFilteredRequests] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
   const [filter, setFilter] = useState("all");
+  const [apiError, setApiError] = useState(null);
 
   useEffect(() => {
-    // Simulate data fetch
-    setReportData([
-      { type: "mentor", count: 12 },
-      { type: "mentee", count: 30 },
-      { type: "activeSessions", count: 45 },
-    ]);
+    fetchMentorshipRequests();
   }, []);
 
-  const barData = {
-    labels: reportData.map((item) => item.type),
-    datasets: [
-      {
-        label: "User Statistics",
-        data: reportData.map((item) => item.count),
-        backgroundColor: ["#3b82f6", "#10b981", "#f59e0b"],
-      },
-    ],
+  useEffect(() => {
+    // Filter requests based on search query and filter
+    let filtered = requests;
+    if (filter !== "all") {
+      filtered = requests.filter((request) =>
+        filter === "mentor" ? request.mentor_name : request.mentee_name
+      );
+    }
+    if (searchQuery) {
+      filtered = filtered.filter(
+        (request) =>
+          request.mentee_name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          request.mentor_name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          request.status?.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+    }
+    setFilteredRequests(filtered);
+  }, [searchQuery, filter, requests]);
+
+  const fetchMentorshipRequests = async () => {
+    try {
+      const res = await api.get("/admin/mentorship-requests-report");
+      console.log("Fetched requests:", res.data);
+      setRequests(res.data);
+      setFilteredRequests(res.data);
+      setApiError(null);
+    } catch (error) {
+      console.error("Fetch requests error:", error);
+      setApiError(`Failed to fetch mentorship requests: ${error.response?.data?.message || error.message}`);
+    }
   };
 
-  const handleDownload = () => {
-    const blob = new Blob([JSON.stringify(reportData)], { type: "application/json" });
-    const link = document.createElement("a");
-    link.href = URL.createObjectURL(blob);
-    link.download = "report.json";
-    link.click();
+  const handleExportPDF = () => {
+    const doc = new jsPDF({
+      orientation: "portrait",
+      unit: "pt",
+      format: "a4",
+    });
+
+    // Set document properties
+    doc.setProperties({
+      title: "Mentorship Requests Report",
+      author: "CodeBuddy Admin",
+      creator: "CodeBuddy",
+    });
+
+    // Add title
+    doc.setFontSize(18);
+    doc.setFont("helvetica", "bold");
+    doc.setTextColor(60, 60, 180);
+    doc.text("Mentorship Requests Report", 40, 40);
+
+    // Prepare table data
+    const tableData = filteredRequests.map((request) => [
+      request.id.toString(),
+      request.mentee_name || "N/A",
+      request.mentor_name || "N/A",
+      request.status,
+      new Date(request.created_at).toLocaleDateString(),
+    ]);
+
+    // Generate table with autoTable
+    doc.autoTable({
+      head: [["Request ID", "Mentee", "Mentor", "Status", "Date"]],
+      body: tableData,
+      startY: 60,
+      theme: "striped",
+      headStyles: {
+        fillColor: [59, 130, 246], // Blue headers (#3b82f6)
+        textColor: [255, 255, 255], // White text
+        fontStyle: "bold",
+      },
+      alternateRowStyles: {
+        fillColor: [249, 250, 251], // Light gray for alternating rows (#f9fafb)
+      },
+      margin: { top: 60, left: 40, right: 40 },
+      styles: {
+        font: "helvetica",
+        fontSize: 10,
+        textColor: [55, 65, 81], // Gray text (#374151)
+        lineColor: [209, 213, 219], // Gray borders (#d1d5db)
+        lineWidth: 0.5,
+      },
+    });
+
+    // Save the PDF
+    doc.save("mentorship_requests.pdf");
   };
 
   return (
-    <div className="p-4">
-      <h1 className="text-2xl font-bold mb-4 text-blue-900">Reports & Analytics</h1>
+    <div className="p-6 bg-gray-50 min-h-screen">
+      <h1 className="text-3xl font-bold text-gray-800 mb-8">Reports & Analytics</h1>
 
-      <div className="flex items-center justify-between mb-4">
-        <div>
-          <label className="mr-2">Filter:</label>
-          <select value={filter} onChange={(e) => setFilter(e.target.value)} className="border p-2 rounded">
-            <option value="all">All</option>
-            <option value="mentor">Mentors</option>
-            <option value="mentee">Mentees</option>
-          </select>
+      {/* Error Message */}
+      {apiError && (
+        <div className="mb-6 p-4 bg-red-100 text-red-700 rounded-lg flex items-center gap-2">
+          <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+            <path
+              fillRule="evenodd"
+              d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+              clipRule="evenodd"
+            />
+          </svg>
+          {apiError}
         </div>
-        <button onClick={handleDownload} className="flex items-center bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
-          <FaDownload className="mr-2" /> Export Report
+      )}
+
+      <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center gap-4">
+          <div>
+            <label className="mr-2 text-gray-600">Filter:</label>
+            <select
+              value={filter}
+              onChange={(e) => setFilter(e.target.value)}
+              className="border border-gray-300 p-2 rounded-lg focus:ring-2 focus:ring-blue-300 focus:outline-none"
+            >
+              <option value="all">All</option>
+              <option value="mentor">Mentor Requests</option>
+              <option value="mentee">Mentee Requests</option>
+            </select>
+          </div>
+          <div className="relative w-full max-w-md">
+            <input
+              type="text"
+              placeholder="Search requests by mentee, mentor, or status..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full px-4 py-3 pl-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-300 focus:outline-none transition-all duration-200"
+            />
+            <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+          </div>
+        </div>
+        <button
+          onClick={handleExportPDF}
+          className="flex items-center bg-gradient-to-r from-blue-500 to-blue-600 text-white px-4 py-2 rounded-lg hover:from-blue-600 hover:to-blue-700 transition-all duration-200"
+        >
+          <FaDownload className="mr-2" /> Export to PDF
         </button>
       </div>
 
-      <div className="bg-white shadow p-4 rounded-lg">
-        <Bar data={barData} />
+      <div className="bg-white p-6 rounded-2xl shadow-lg">
+        <h2 className="text-xl font-semibold text-gray-800 mb-4">Mentorship Requests</h2>
+        <div className="overflow-x-auto">
+          <table id="mentorship-requests-table" className="w-full text-left">
+            <thead>
+              <tr className="border-b border-gray-200">
+                <th className="py-3 px-4 text-sm font-semibold text-gray-600">Request ID</th>
+                <th className="py-3 px-4 text-sm font-semibold text-gray-600">Mentee</th>
+                <th className="py-3 px-4 text-sm font-semibold text-gray-600">Mentor</th>
+                <th className="py-3 px-4 text-sm font-semibold text-gray-600">Status</th>
+                <th className="py-3 px-4 text-sm font-semibold text-gray-600">Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filteredRequests.length === 0 ? (
+                <tr key="no-requests">
+                  <td colSpan="5" className="py-4 text-center text-gray-500">
+                    {searchQuery ? "No requests match your search" : "No requests found"}
+                  </td>
+                </tr>
+              ) : (
+                filteredRequests.map((request) => (
+                  <tr
+                    key={request.id}
+                    className="border-b border-gray-100 hover:bg-gray-50 transition-colors duration-200"
+                  >
+                    <td className="py-3 px-4 text-sm text-gray-700">{request.id}</td>
+                    <td className="py-3 px-4 text-sm text-gray-700">{request.mentee_name || "N/A"}</td>
+                    <td className="py-3 px-4 text-sm text-gray-700">{request.mentor_name || "N/A"}</td>
+                    <td className="py-3 px-4 text-sm text-gray-700">{request.status}</td>
+                    <td className="py-3 px-4 text-sm text-gray-700">
+                      {new Date(request.created_at).toLocaleDateString() || "N/A"}
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   );

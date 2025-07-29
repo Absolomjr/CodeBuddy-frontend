@@ -52,15 +52,9 @@ const Sidebar = () => {
           activePath={location.pathname}
         />
         <SidebarLink
-          to="/admin-dashboard/add-mentor"
+          to="/admin-dashboard/mentors"
           icon={<FaUserPlus />}
           label="Mentors"
-          activePath={location.pathname}
-        />
-        <SidebarLink
-          to="/admin-dashboard/reports"
-          icon={<FaChartBar />}
-          label="Reports"
           activePath={location.pathname}
         />
         <SidebarLink

@@ -1,29 +1,47 @@
 import React, { useEffect, useState } from "react";
-import { FaUserPlus, FaTrash, FaEdit, FaPlus } from "react-icons/fa";
+import { FaUserPlus, FaTrash, FaEdit, FaPlus, FaSearch } from "react-icons/fa";
 import ConfirmationModal from "../ConfirmationModal";
 import api from "../../api";
 
 const AddMentor = () => {
   const [mentors, setMentors] = useState([]);
+  const [filteredMentors, setFilteredMentors] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [modalType, setModalType] = useState("add");
-  const [form, setForm] = useState({ name: "", email: "", password: "", specialty: "" });
+  const [form, setForm] = useState({ name: "", email: "", password: "", degree: "" });
   const [errors, setErrors] = useState({});
   const [apiError, setApiError] = useState(null);
   const [selectedMentorId, setSelectedMentorId] = useState(null);
   const [confirmDeleteId, setConfirmDeleteId] = useState(null);
 
+  const degreeOptions = ["BSCS", "BSDS", "BSIT"];
+
   useEffect(() => {
     fetchMentors();
   }, []);
 
+  useEffect(() => {
+    // Filter mentors based on search query
+    const filtered = mentors.filter(
+      (mentor) =>
+        mentor.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        mentor.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        mentor.degree.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+    setFilteredMentors(filtered);
+  }, [searchQuery, mentors]);
+
   const fetchMentors = async () => {
     try {
-      const res = await api.get("/mentors");
+      const res = await api.get("/admin/mentors");
+      console.log("Fetched mentors:", res.data);
       setMentors(res.data);
+      setFilteredMentors(res.data);
       setApiError(null);
     } catch (error) {
-      setApiError("Failed to fetch mentors. Please try again.");
+      console.error("Fetch mentors error:", error);
+      setApiError(`Failed to fetch mentors: ${error.response?.data?.message || error.message}`);
     }
   };
 
@@ -33,7 +51,7 @@ const AddMentor = () => {
     if (!form.email.trim()) newErrors.email = "Email is required";
     else if (!/\S+@\S+\.\S+/.test(form.email)) newErrors.email = "Invalid email format";
     if (modalType === "add" && !form.password) newErrors.password = "Password is required";
-    if (!form.specialty.trim()) newErrors.specialty = "Specialty is required";
+    if (!form.degree) newErrors.degree = "Degree is required";
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -43,22 +61,29 @@ const AddMentor = () => {
     setErrors({ ...errors, [e.target.name]: null });
   };
 
+  const handleSearchChange = (e) => {
+    setSearchQuery(e.target.value);
+  };
+
   const openAddModal = () => {
-    setForm({ name: "", email: "", password: "", specialty: "" });
+    setForm({ name: "", email: "", password: "", degree: "" });
     setModalType("add");
     setSelectedMentorId(null);
     setShowModal(true);
     setErrors({});
     setApiError(null);
+    setSearchQuery(""); // Reset search on add
   };
 
   const openEditModal = (mentor) => {
-    setForm({ name: mentor.name, email: mentor.email, password: "", specialty: mentor.specialty });
+    // console.log(mentor)
+    setForm({ name: mentor.name, email: mentor.email, password: "", degree: mentor.degree || "" });
     setModalType("edit");
-    setSelectedMentorId(mentor.id);
+    setSelectedMentorId(mentor.user_id);
     setShowModal(true);
     setErrors({});
     setApiError(null);
+    setSearchQuery(""); // Reset search on edit
   };
 
   const handleModalSubmit = async (e) => {
@@ -66,32 +91,48 @@ const AddMentor = () => {
     if (!validateForm()) return;
     try {
       if (modalType === "add") {
-        await api.post("/mentors", form);
-      } else if (modalType === "edit") {
-        await api.put(`/mentors/${selectedMentorId}`, {
+        await api.post("/admin/mentor", {
           name: form.name,
           email: form.email,
-          specialty: form.specialty,
+          password: form.password,
+          degree: form.degree,
+        });
+      } else if (modalType === "edit") {
+        console.log("Editing mentor:", selectedMentorId, form);
+        await api.put(`/admin/mentor/${selectedMentorId}`, {
+          name: form.name,
+          email: form.email,
+          degree: form.degree,
         });
       }
       fetchMentors();
       setShowModal(false);
     } catch (error) {
-      setApiError(`Failed to ${modalType === "add" ? "add" : "update"} mentor. Please try again.`);
+      console.error(`${modalType === "add" ? "Add" : "Update"} mentor error:`, error);
+      setApiError(
+        `Failed to ${modalType === "add" ? "add" : "update"} mentor: ${
+          error.response?.data?.message || error.message
+        }`
+      );
     }
   };
 
   const confirmDelete = (id) => {
+    console.log("Confirm delete for mentor ID:", id);
     setConfirmDeleteId(id);
   };
 
   const handleDeleteConfirmed = async () => {
     try {
-      await api.delete(`/users/${confirmDeleteId}/Mentor`);
+      console.log("Sending DELETE request for mentor ID:", confirmDeleteId);
+      const response = await api.delete(`/admin/Mentor/${confirmDeleteId}`);
+      console.log("Delete response:", response.data);
       fetchMentors();
       setApiError(null);
+      setSearchQuery(""); // Reset search on delete
     } catch (error) {
-      setApiError("Failed to delete mentor. Please try again.");
+      console.error("Delete mentor error:", error);
+      setApiError(`Failed to delete mentor: ${error.response?.data?.message || error.message}`);
     } finally {
       setConfirmDeleteId(null);
     }
@@ -123,6 +164,20 @@ const AddMentor = () => {
         </div>
       )}
 
+      {/* Search Bar */}
+      <div className="mb-6">
+        <div className="relative w-full max-w-md">
+          <input
+            type="text"
+            placeholder="Search mentors by name, email, or degree..."
+            value={searchQuery}
+            onChange={handleSearchChange}
+            className="w-full px-4 py-3 pl-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-300 focus:outline-none transition-all duration-200"
+          />
+          <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+        </div>
+      </div>
+
       {/* Mentors Table */}
       <div className="bg-white p-6 rounded-2xl shadow-lg">
         <h2 className="text-xl font-semibold text-gray-800 mb-4">Mentor List</h2>
@@ -132,26 +187,26 @@ const AddMentor = () => {
               <tr className="border-b border-gray-200">
                 <th className="py-3 px-4 text-sm font-semibold text-gray-600">Name</th>
                 <th className="py-3 px-4 text-sm font-semibold text-gray-600">Email</th>
-                <th className="py-3 px-4 text-sm font-semibold text-gray-600">Specialty</th>
+                <th className="py-3 px-4 text-sm font-semibold text-gray-600">Degree</th>
                 <th className="py-3 px-4 text-sm font-semibold text-gray-600">Actions</th>
               </tr>
             </thead>
             <tbody>
-              {mentors.length === 0 ? (
-                <tr>
+              {filteredMentors.length === 0 ? (
+                <tr key="no-mentors">
                   <td colSpan="4" className="py-4 text-center text-gray-500">
-                    No mentors found
+                    {searchQuery ? "No mentors match your search" : "No mentors found"}
                   </td>
                 </tr>
               ) : (
-                mentors.map((mentor) => (
+                filteredMentors.map((mentor) => (
                   <tr
-                    key={mentor.id}
+                    key={mentor.user_id}
                     className="border-b border-gray-100 hover:bg-gray-50 transition-colors duration-200"
                   >
                     <td className="py-3 px-4 text-sm text-gray-700">{mentor.name}</td>
                     <td className="py-3 px-4 text-sm text-gray-700">{mentor.email}</td>
-                    <td className="py-3 px-4 text-sm text-gray-700">{mentor.specialty}</td>
+                    <td className="py-3 px-4 text-sm text-gray-700">{mentor.degree}</td>
                     <td className="py-3 px-4 flex gap-2">
                       <button
                         onClick={() => openEditModal(mentor)}
@@ -160,7 +215,7 @@ const AddMentor = () => {
                         <FaEdit />
                       </button>
                       <button
-                        onClick={() => confirmDelete(mentor.id)}
+                        onClick={() => confirmDelete(mentor.user_id)}
                         className="text-red-500 hover:text-red-600 transition-colors duration-200"
                       >
                         <FaTrash />
@@ -198,7 +253,6 @@ const AddMentor = () => {
                   placeholder="Name"
                   value={form.name}
                   onChange={handleFormChange}
-                  required
                 />
                 {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name}</p>}
               </div>
@@ -212,7 +266,6 @@ const AddMentor = () => {
                   placeholder="Email"
                   value={form.email}
                   onChange={handleFormChange}
-                  required
                 />
                 {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
               </div>
@@ -227,24 +280,29 @@ const AddMentor = () => {
                     placeholder="Password"
                     value={form.password}
                     onChange={handleFormChange}
-                    required
                   />
                   {errors.password && <p className="text-red-500 text-sm mt-1">{errors.password}</p>}
                 </div>
               )}
               <div>
-                <input
+                <select
                   className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-300 focus:outline-none transition-all duration-200 ${
-                    errors.specialty ? "border-red-500" : "border-gray-300"
+                    errors.degree ? "border-red-500" : "border-gray-300"
                   }`}
-                  type="text"
-                  name="specialty"
-                  placeholder="Specialty"
-                  value={form.specialty}
+                  name="degree"
+                  value={form.degree}
                   onChange={handleFormChange}
-                  required
-                />
-                {errors.specialty && <p className="text-red-500 text-sm mt-1">{errors.specialty}</p>}
+                >
+                  <option value="" disabled>
+                    Select Degree
+                  </option>
+                  {degreeOptions.map((option) => (
+                    <option key={option} value={option}>
+                      {option}
+                    </option>
+                  ))}
+                </select>
+                {errors.degree && <p className="text-red-500 text-sm mt-1">{errors.degree}</p>}
               </div>
               <button
                 type="submit"

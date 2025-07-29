@@ -81,7 +81,7 @@ const DashboardContent = () => {
           <p className="text-sm text-gray-500 mt-2">Total Mentees</p>
           <button
             onClick={() => navigate("/admin-dashboard/mentees")}
-            className="mt-4 flex items-center gap-2 text-green-400 px-4 py-2 rounded-lgtransition-all duration-200"
+            className="mt-4 flex items-center gap-2 text-green-400 px-4 py-2 rounded-lg transition-all duration-200"
           >
             Manage Mentees
           </button>

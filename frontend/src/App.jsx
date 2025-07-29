@@ -22,7 +22,7 @@ function App() {
   }, []);
 
   return (
-    <div className="bg-white text-black dark:bg-gray-900 dark:text-white min-h-screen">
+    <div className="bg-white min-h-screen">
       <UserProvider>
         <Router>
           <Routes>
@@ -54,7 +54,7 @@ function App() {
             >
               <Route index element={<DashboardContent />} />
               <Route path="mentees" element={<MenteesDashboard />} />
-              <Route path="add-mentor" element={<AddMentor />} />
+              <Route path="mentors" element={<AddMentor />} />
               <Route path="reports" element={<Reports />} />
               <Route path="settings" element={<Settings />} />
             </Route>
