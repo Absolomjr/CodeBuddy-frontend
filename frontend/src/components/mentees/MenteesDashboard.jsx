@@ -13,6 +13,10 @@ const MenteesDashboard = () => {
   const [mentees, setMentees] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showAddModal, setShowAddModal] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+  const filteredMentees = mentees.filter((mentee) =>
+    mentee.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
   const [form, setForm] = useState({
     name: "",
     email: "",
@@ -114,7 +118,11 @@ const MenteesDashboard = () => {
       <h2 className="text-2xl font-bold">Manage Mentees</h2>
 
       <MenteeStatsCard mentees={mentees} />
-      <MenteeSearchFilter />
+      <MenteeSearchFilter
+        searchTerm={searchTerm}
+        onSearchChange={setSearchTerm}
+      />
+
 
       <div className="flex justify-between items-center mb-2">
         <button
@@ -158,11 +166,13 @@ const MenteesDashboard = () => {
         </div>
       )}
 
+
       {/* Mentee Table */}
       <MenteeTable
-        mentees={mentees}
+        mentees={filteredMentees}
         onEdit={handleEditMentee}
         onDelete={handleDeleteMentee}
+        loadingMenteeId={loadingMenteeId}
       />
 
       {/* Add Mentee Modal */}
