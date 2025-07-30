@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { FaDownload, FaFilter, FaSearch } from "react-icons/fa";
 import api from "../api";
 import jsPDF from "jspdf";
-import autoTable from "jspdf-autotable"; // ✅ IMPORTANT: direct import
+import autoTable from "jspdf-autotable"; 
 
 
 const Reports = () => {

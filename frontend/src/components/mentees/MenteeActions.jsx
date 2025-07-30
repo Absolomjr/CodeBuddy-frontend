@@ -18,7 +18,7 @@ const MenteeActions = ({ mentee, onEdit, onDelete }) => {
   };
 
   const confirmDelete = () => {
-    onDelete(mentee._id);
+    onDelete(mentee.id);
     setShowDeleteConfirm(false);
   };
 
@@ -32,7 +32,7 @@ const MenteeActions = ({ mentee, onEdit, onDelete }) => {
 
   const handleEditSubmit = (e) => {
     e.preventDefault();
-    onEdit(mentee._id, editForm);
+    onEdit(mentee.id, editForm);
     setShowEditModal(false);
   };
 
