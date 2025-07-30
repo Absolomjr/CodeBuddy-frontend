@@ -105,12 +105,12 @@ const Reports = () => {
   };
 
   return (
-    <div className="p-6 bg-gray-50 min-h-screen">
-      <h1 className="text-3xl font-bold text-gray-800 mb-8">Reports & Analytics</h1>
+    <div className="min-h-screen p-6 bg-gray-50">
+      <h1 className="mb-8 text-3xl font-bold text-gray-800">Reports & Analytics</h1>
 
       {/* Error Message */}
       {apiError && (
-        <div className="mb-6 p-4 bg-red-100 text-red-700 rounded-lg flex items-center gap-2">
+        <div className="flex items-center gap-2 p-4 mb-6 text-red-700 bg-red-100 rounded-lg">
           <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
             <path
               fillRule="evenodd"
@@ -124,48 +124,48 @@ const Reports = () => {
 
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-4">
-          <div>
+          <div className="flex items-center space-x-2">
             <label className="mr-2 text-gray-600">Filter:</label>
             <select
               value={filter}
               onChange={(e) => setFilter(e.target.value)}
-              className="border border-gray-300 p-2 rounded-lg focus:ring-2 focus:ring-blue-300 focus:outline-none"
+              className="p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-300 focus:outline-none"
             >
               <option value="all">All</option>
               <option value="mentor">Mentor Requests</option>
               <option value="mentee">Mentee Requests</option>
             </select>
           </div>
-          <div className="relative w-full max-w-md">
+          <div className="relative w-full max-w-xl">
             <input
               type="text"
               placeholder="Search requests by mentee, mentor, or status..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full px-4 py-3 pl-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-300 focus:outline-none transition-all duration-200"
+              className="w-full px-4 py-3 pl-10 transition-all duration-200 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-300 focus:outline-none"
             />
-            <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+            <FaSearch className="absolute text-gray-400 transform -translate-y-1/2 left-3 top-1/2" />
           </div>
         </div>
         <button
           onClick={handleExportPDF}
-          className="flex items-center bg-gradient-to-r from-blue-500 to-blue-600 text-white px-4 py-2 rounded-lg hover:from-blue-600 hover:to-blue-700 transition-all duration-200"
+          className="flex items-center px-4 py-2 text-white transition-all duration-200 rounded-lg bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700"
         >
           <FaDownload className="mr-2" /> Export to PDF
         </button>
       </div>
 
-      <div className="bg-white p-6 rounded-2xl shadow-lg">
-        <h2 className="text-xl font-semibold text-gray-800 mb-4">Mentorship Requests</h2>
+      <div className="p-6 bg-white shadow-lg rounded-2xl">
+        <h2 className="mb-4 text-xl font-semibold text-gray-800">Mentorship Requests</h2>
         <div className="overflow-x-auto">
           <table id="mentorship-requests-table" className="w-full text-left">
             <thead>
               <tr className="border-b border-gray-200">
-                <th className="py-3 px-4 text-sm font-semibold text-gray-600">Request ID</th>
-                <th className="py-3 px-4 text-sm font-semibold text-gray-600">Mentee</th>
-                <th className="py-3 px-4 text-sm font-semibold text-gray-600">Mentor</th>
-                <th className="py-3 px-4 text-sm font-semibold text-gray-600">Status</th>
-                <th className="py-3 px-4 text-sm font-semibold text-gray-600">Date</th>
+                <th className="px-4 py-3 text-sm font-semibold text-gray-600">Request ID</th>
+                <th className="px-4 py-3 text-sm font-semibold text-gray-600">Mentee</th>
+                <th className="px-4 py-3 text-sm font-semibold text-gray-600">Mentor</th>
+                <th className="px-4 py-3 text-sm font-semibold text-gray-600">Status</th>
+                <th className="px-4 py-3 text-sm font-semibold text-gray-600">Date</th>
               </tr>
             </thead>
             <tbody>
@@ -179,13 +179,13 @@ const Reports = () => {
                 filteredRequests.map((request) => (
                   <tr
                     key={request.id}
-                    className="border-b border-gray-100 hover:bg-gray-50 transition-colors duration-200"
+                    className="transition-colors duration-200 border-b border-gray-100 hover:bg-gray-50"
                   >
-                    <td className="py-3 px-4 text-sm text-gray-700">{request.id}</td>
-                    <td className="py-3 px-4 text-sm text-gray-700">{request.mentee_name || "N/A"}</td>
-                    <td className="py-3 px-4 text-sm text-gray-700">{request.mentor_name || "N/A"}</td>
-                    <td className="py-3 px-4 text-sm text-gray-700">{request.status}</td>
-                    <td className="py-3 px-4 text-sm text-gray-700">
+                    <td className="px-4 py-3 text-sm text-gray-700">{request.id}</td>
+                    <td className="px-4 py-3 text-sm text-gray-700">{request.mentee_name || "N/A"}</td>
+                    <td className="px-4 py-3 text-sm text-gray-700">{request.mentor_name || "N/A"}</td>
+                    <td className="px-4 py-3 text-sm text-gray-700">{request.status}</td>
+                    <td className="px-4 py-3 text-sm text-gray-700">
                       {new Date(request.created_at).toLocaleDateString() || "N/A"}
                     </td>
                   </tr>
