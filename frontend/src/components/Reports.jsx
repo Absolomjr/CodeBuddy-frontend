@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { FaDownload, FaFilter, FaSearch } from "react-icons/fa";
 import api from "../api";
-import { jsPDF } from "jspdf";
-import "jspdf-autotable";
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable"; // ✅ IMPORTANT: direct import
+
 
 const Reports = () => {
   const [requests, setRequests] = useState([]);
@@ -53,21 +54,12 @@ const Reports = () => {
       unit: "pt",
       format: "a4",
     });
-
-    // Set document properties
-    doc.setProperties({
-      title: "Mentorship Requests Report",
-      author: "CodeBuddy Admin",
-      creator: "CodeBuddy",
-    });
-
-    // Add title
+  
     doc.setFontSize(18);
     doc.setFont("helvetica", "bold");
     doc.setTextColor(60, 60, 180);
     doc.text("Mentorship Requests Report", 40, 40);
-
-    // Prepare table data
+  
     const tableData = filteredRequests.map((request) => [
       request.id.toString(),
       request.mentee_name || "N/A",
@@ -75,34 +67,34 @@ const Reports = () => {
       request.status,
       new Date(request.created_at).toLocaleDateString(),
     ]);
-
-    // Generate table with autoTable
-    doc.autoTable({
+  
+    // ✅ Instead of doc.autoTable({...})
+    autoTable(doc, {
       head: [["Request ID", "Mentee", "Mentor", "Status", "Date"]],
       body: tableData,
       startY: 60,
       theme: "striped",
       headStyles: {
-        fillColor: [59, 130, 246], // Blue headers (#3b82f6)
-        textColor: [255, 255, 255], // White text
+        fillColor: [59, 130, 246],
+        textColor: [255, 255, 255],
         fontStyle: "bold",
       },
       alternateRowStyles: {
-        fillColor: [249, 250, 251], // Light gray for alternating rows (#f9fafb)
+        fillColor: [249, 250, 251],
       },
       margin: { top: 60, left: 40, right: 40 },
       styles: {
         font: "helvetica",
         fontSize: 10,
-        textColor: [55, 65, 81], // Gray text (#374151)
-        lineColor: [209, 213, 219], // Gray borders (#d1d5db)
+        textColor: [55, 65, 81],
+        lineColor: [209, 213, 219],
         lineWidth: 0.5,
       },
     });
-
-    // Save the PDF
+  
     doc.save("mentorship_requests.pdf");
   };
+  
 
   return (
     <div className="min-h-screen p-6 bg-gray-50">
