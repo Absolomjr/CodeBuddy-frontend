@@ -35,12 +35,12 @@ const DashboardContent = () => {
   };
 
   return (
-    <div className="p-6 bg-gray-50 min-h-screen">
-      <h1 className="text-3xl font-bold text-gray-800 mb-8">Admin Dashboard</h1>
+    <div className="min-h-screen p-6 bg-gray-50">
+      <h1 className="mb-8 text-3xl font-bold text-gray-800">Admin Dashboard</h1>
 
       {/* Error Message */}
       {apiError && (
-        <div className="mb-6 p-4 bg-red-100 text-red-700 rounded-lg flex items-center gap-2">
+        <div className="flex items-center gap-2 p-4 mb-6 text-red-700 bg-red-100 rounded-lg">
           <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
             <path
               fillRule="evenodd"
@@ -53,51 +53,51 @@ const DashboardContent = () => {
       )}
 
       {/* Summary Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
-        <div className="bg-white p-6 rounded-2xl shadow-sm hover:shadow-sm transition-shadow duration-300">
+      <div className="grid grid-cols-1 gap-6 mb-10 md:grid-cols-3">
+        <div className="p-6 transition-shadow duration-300 bg-white shadow-sm rounded-2xl hover:shadow-sm">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <FaChalkboardTeacher className="text-blue-600 text-3xl" />
+              <FaChalkboardTeacher className="text-3xl text-blue-600" />
               <h2 className="text-xl font-semibold text-gray-800">Mentors</h2>
             </div>
             <span className="text-2xl font-bold text-blue-600">{report.totalMentors}</span>
           </div>
-          <p className="text-sm text-gray-500 mt-2">Total Mentors</p>
+          <p className="mt-2 text-sm text-gray-500">Total Mentors</p>
           <button
-            onClick={() => navigate("/admin-dashboard/add-mentor")}
-            className="mt-4 flex items-center gap-2 text-blue-500 px-4 py-2 rounded-lgtransition-all duration-200"
+            onClick={() => navigate("/admin-dashboard/mentors")}
+            className="flex items-center gap-2 px-4 py-2 mt-4 text-blue-500 duration-200 rounded-lgtransition-all"
           >
          Manage Mentors
           </button>
         </div>
-        <div className="bg-white p-6 rounded-2xl shadow-sm hover:shadow-xl transition-shadow duration-300">
+        <div className="p-6 transition-shadow duration-300 bg-white shadow-sm rounded-2xl hover:shadow-xl">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <FaUserGraduate className="text-green-600 text-3xl" />
+              <FaUserGraduate className="text-3xl text-green-600" />
               <h2 className="text-xl font-semibold text-gray-800">Mentees</h2>
             </div>
             <span className="text-2xl font-bold text-green-600">{report.totalMentees}</span>
           </div>
-          <p className="text-sm text-gray-500 mt-2">Total Mentees</p>
+          <p className="mt-2 text-sm text-gray-500">Total Mentees</p>
           <button
             onClick={() => navigate("/admin-dashboard/mentees")}
-            className="mt-4 flex items-center gap-2 text-green-400 px-4 py-2 rounded-lg transition-all duration-200"
+            className="flex items-center gap-2 px-4 py-2 mt-4 text-green-400 transition-all duration-200 rounded-lg"
           >
             Manage Mentees
           </button>
         </div>
-        <div className="bg-white p-6 rounded-2xl shadow-sm hover:shadow-md transition-shadow duration-300">
+        <div className="p-6 transition-shadow duration-300 bg-white shadow-sm rounded-2xl hover:shadow-md">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <FaHandshake className="text-purple-600 text-3xl" />
+              <FaHandshake className="text-3xl text-purple-600" />
               <h2 className="text-xl font-semibold text-gray-800">Active Sessions</h2>
             </div>
             <span className="text-2xl font-bold text-purple-600">{report.activeSessions}</span>
           </div>
-          <p className="text-sm text-gray-500 mt-2">Ongoing Mentorships</p>
+          <p className="mt-2 text-sm text-gray-500">Ongoing Mentorships</p>
           <button
             onClick={() => navigate("/admin-dashboard/reports")}
-            className="mt-4 flex items-center gap-2 text-purple-500 transition-all duration-200"
+            className="flex items-center gap-2 mt-4 text-purple-500 transition-all duration-200"
           >
             View Reports
           </button>
@@ -105,12 +105,12 @@ const DashboardContent = () => {
       </div>
 
       {/* Mentorship Requests Summary */}
-      <div className="bg-white p-6 rounded-2xl shadow-lg">
-        <div className="flex justify-between items-center mb-4">
+      <div className="p-6 bg-white shadow-lg rounded-2xl">
+        <div className="flex items-center justify-between mb-4">
           <h2 className="text-xl font-semibold text-gray-800">Recent Mentorship Requests</h2>
           <button
             onClick={() => navigate("/admin-dashboard/reports")}
-            className="text-blue-500 hover:text-blue-600 text-sm font-semibold"
+            className="text-sm font-semibold text-blue-500 hover:text-blue-600"
           >
             View All
           </button>
@@ -119,11 +119,11 @@ const DashboardContent = () => {
           <table className="w-full text-left">
             <thead>
               <tr className="border-b border-gray-200">
-                <th className="py-3 px-4 text-sm font-semibold text-gray-600">Request ID</th>
-                <th className="py-3 px-4 text-sm font-semibold text-gray-600">Mentee</th>
-                <th className="py-3 px-4 text-sm font-semibold text-gray-600">Mentor</th>
-                <th className="py-3 px-4 text-sm font-semibold text-gray-600">Status</th>
-                <th className="py-3 px-4 text-sm font-semibold text-gray-600">Date</th>
+                <th className="px-4 py-3 text-sm font-semibold text-gray-600">Request ID</th>
+                <th className="px-4 py-3 text-sm font-semibold text-gray-600">Mentee</th>
+                <th className="px-4 py-3 text-sm font-semibold text-gray-600">Mentor</th>
+                <th className="px-4 py-3 text-sm font-semibold text-gray-600">Status</th>
+                <th className="px-4 py-3 text-sm font-semibold text-gray-600">Date</th>
               </tr>
             </thead>
             <tbody>
@@ -137,13 +137,13 @@ const DashboardContent = () => {
                 requests.map((request) => (
                   <tr
                     key={request.id}
-                    className="border-b border-gray-100 hover:bg-gray-50 transition-colors duration-200"
+                    className="transition-colors duration-200 border-b border-gray-100 hover:bg-gray-50"
                   >
-                    <td className="py-3 px-4 text-sm text-gray-700">{request.id}</td>
-                    <td className="py-3 px-4 text-sm text-gray-700">{request.mentee_name || "N/A"}</td>
-                    <td className="py-3 px-4 text-sm text-gray-700">{request.mentor_name || "N/A"}</td>
-                    <td className="py-3 px-4 text-sm text-gray-700">{request.status}</td>
-                    <td className="py-3 px-4 text-sm text-gray-700">
+                    <td className="px-4 py-3 text-sm text-gray-700">{request.id}</td>
+                    <td className="px-4 py-3 text-sm text-gray-700">{request.mentee_name || "N/A"}</td>
+                    <td className="px-4 py-3 text-sm text-gray-700">{request.mentor_name || "N/A"}</td>
+                    <td className="px-4 py-3 text-sm text-gray-700">{request.status}</td>
+                    <td className="px-4 py-3 text-sm text-gray-700">
                       {new Date(request.created_at).toLocaleDateString() || "N/A"}
                     </td>
                   </tr>
