@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react";
 import { Search, Download, Calendar } from "lucide-react";
 import api from "../api";
 import jsPDF from "jspdf";
-import autoTable from "jspdf-autotable";
+import autoTable from "jspdf-autotable"; 
+
 
 const Reports = () => {
   const [requests, setRequests] = useState([]);

@@ -14,9 +14,12 @@ const MenteesDashboard = () => {
   const [loading, setLoading] = useState(true);
   const [showAddModal, setShowAddModal] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
-  const filteredMentees = mentees.filter((mentee) =>
-    mentee.name.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredMentees = mentees.filter(
+    (mentee) =>
+      mentee.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      mentee.email?.toLowerCase().includes(searchTerm.toLowerCase())
   );
+  
   const [form, setForm] = useState({
     name: "",
     email: "",
@@ -70,10 +73,10 @@ const MenteesDashboard = () => {
   const handleEditMentee = async (id, updatedData) => {
     try {
       setLoadingMenteeId(id);
-      const response = await axiosInstance.put(`/mentees/${id}`, updatedData);
+      const response = await axiosInstance.put(`/admin/mentee/${id}`, updatedData);
       const updated = response.data;
       setMentees((prev) =>
-        prev.map((mentee) => (mentee._id === id ? updated : mentee))
+        prev.map((mentee) => (mentee.id === id ? updated : mentee))
       );
       toast.success("Mentee updated successfully!");
     } catch (error) {
@@ -83,12 +86,14 @@ const MenteesDashboard = () => {
     }
   };
 
+
+
   // ✅ Delete mentee
   const handleDeleteMentee = async (id) => {
     try {
       setLoadingMenteeId(id);
-      await axiosInstance.delete(`/mentees/${id}`);
-      setMentees((prev) => prev.filter((mentee) => mentee._id !== id));
+      await axiosInstance.delete(`/admin/Mentee/${id}`);
+      setMentees((prev) => prev.filter((mentee) => mentee.id !== id));
       toast.success("Mentee deleted successfully!");
     } catch (error) {
       toast.error("Failed to delete mentee.");
@@ -96,6 +101,7 @@ const MenteesDashboard = () => {
       setLoadingMenteeId(null);
     }
   };
+
 
   // ✅ Generate PDF Report
   const handleGenerateReport = () => {
