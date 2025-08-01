@@ -138,12 +138,12 @@ const MenteesDashboard = () => {
         >
           <FaPlus /> Add Mentee
         </button>
-        <button
+        {/* <button
           onClick={() => setShowConfirm(true)}
           className="flex items-center gap-2 bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
         >
           Generate Mentee Report
-        </button>
+        </button> */}
       </div>
 
       {/* Confirm Report Modal */}
