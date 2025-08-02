@@ -31,7 +31,7 @@ const MenteesDashboard = () => {
   const [showConfirm, setShowConfirm] = useState(false);
   const [loadingMenteeId, setLoadingMenteeId] = useState(null);
 
-  // ✅ Fetch mentees from backend
+  //  Fetching mentees from backend
   const fetchMentees = async () => {
     try {
       const response = await axiosInstance.get("/admin/mentees");
@@ -47,12 +47,12 @@ const MenteesDashboard = () => {
     fetchMentees();
   }, []);
 
-  // ✅ Handle input change
+  // Handling input change
   const handleFormChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  // ✅ Add a new mentee
+  // Adding  a new mentee
   const handleAddMentee = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -70,7 +70,7 @@ const MenteesDashboard = () => {
     }
   };
 
-  // ✅ Edit mentee
+  // Editing a mentee
   const handleEditMentee = async (id, updatedData) => {
     try {
       setLoadingMenteeId(id);
@@ -89,7 +89,7 @@ const MenteesDashboard = () => {
 
 
 
-  // ✅ Delete mentee
+  // Deleting a mentee
   const handleDeleteMentee = async (id) => {
     try {
       setLoadingMenteeId(id);
@@ -104,7 +104,7 @@ const MenteesDashboard = () => {
   };
 
 
-  // ✅ Generate PDF Report
+  // Generating  PDF Report
   const handleGenerateReport = () => {
     const doc = new jsPDF();
     doc.text("Mentee Report", 14, 15);
