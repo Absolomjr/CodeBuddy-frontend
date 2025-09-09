@@ -16,7 +16,7 @@ const DashboardContent = () => {
 
   const fetchAdminReport = async () => {
     try {
-      const res = await api.get("/admin/report"); // 
+      const res = await api.get("/admin/report"); // updated to the report
       setReport(res.data);
       setApiError(null);
     } catch (error) {
