@@ -95,7 +95,7 @@ const MenteeDashboard = () => {
 
       {/* Main content */}
       <div className="flex-1 p-6 flex flex-col md:flex-row max-w-6xl mx-auto w-full">
-        {/* Recent Activities Sidebar */}
+        {/* */}
         <div className="md:w-1/3 md:mr-8 mb-8 md:mb-0">
           <h3 className="text-lg font-semibold mb-4">Recent Activities</h3>
           <div className="space-y-4">
